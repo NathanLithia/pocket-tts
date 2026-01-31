@@ -20,7 +20,7 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <div class="max-w-xl mx-auto p-4 space-y-4">
-        <h1 class="text-xl font-bold text-center">Pocket TTS</h1>
+        <h1 class="text-xl font-bold text-center">Pocket TTS (Modified by NathanLithia)</h1>
         
         <div class="bg-white p-4 rounded-lg shadow">
             <textarea
@@ -28,7 +28,7 @@
                 class="w-full border rounded p-2"
                 placeholder="Enter your text here..."
                 rows="4"
-            >Hello world. I am Kyutai's Pocket TTS. I'm fast enough to run on small CPUs. I hope you'll like me.</textarea>
+            > </textarea>
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow">
@@ -40,7 +40,7 @@
                 id="voice-url-input"
                 class="w-full border rounded p-2"
                 placeholder="hf://kyutai/tts-voices/alba-mackenna/casual.wav"
-                value="alba"
+                value="azelma"
             />
             <p class="text-xs text-gray-500 mt-1">
                 Supports: http://, https://, or hf:// URLs.<br>
@@ -233,6 +233,17 @@
         // Event listeners
         generateBtn.addEventListener('click', generateAudio);
 
+                // Play / generate on Enter (Shift+Enter for newline)
+        textInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+
+                if (!generateBtn.disabled) {
+                    generateAudio();
+                }
+            }
+        });
+
         function showStatus(message, isLoading = false) {
             statusText.textContent = message;
             statusSpinner.style.display = isLoading ? 'block' : 'none';
@@ -245,6 +256,8 @@
 
         async function generateAudio() {
             const text = textInput.value.trim();
+            textInput.value = '';
+            textInput.focus();
 
             if (!text) {
                 showStatus('Please enter some text to generate speech.', false);
